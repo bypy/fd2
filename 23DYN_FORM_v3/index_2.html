@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>N.23 Домашнее задание DYN_FORM</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <script src="form_builder.js"></script>
+    <script>
+        "use strict";
+        (function(){
+            // подготовка "обертки" страницы и форм
+            var pageWrapper = document.createElement("div");
+            pageWrapper.className = "page-wrapper";
+            document.body.appendChild(pageWrapper);
+            var formWrapper = document.createElement("div");
+            formWrapper.className = "form-wrapper";
+            pageWrapper.appendChild(formWrapper); // родитель для первой формы
+            pageWrapper.appendChild(formWrapper.cloneNode()); // родитель для второй формы
+
+            // элемент первой формы
+            var adsForm = document.createElement("form");
+            adsForm.id = "adsForm";
+            adsForm.classList.add("dynform", "dynform--pink");
+            adsForm.method = "POST";
+            adsForm.action = "http://fe.it-academy.by/TestForm.php";
+            adsForm.autocomplete = "on";
+            adsForm.target = "_blank";
+
+            // элемент второй формы
+            var regForm = adsForm.cloneNode(true);
+            regForm.id = "regForm";
+            regForm.method = "GET";
+
+            // привяжем формы к DOM как дочерние объекты контейнеров formWrapper
+            var formWrappers = document.getElementsByClassName("form-wrapper");
+            formWrappers[0].appendChild(adsForm);
+            formWrappers[1].appendChild(regForm);
+
+            // параметры для содержимого формы 1
+            var formDef1=
+            [
+                {label:"Название сайта:",kind:"longtext",name:"sitename"},
+                {label:"URL сайта:",kind:"longtext",name:"siteurl"},
+                {label:"Посетителей в сутки:",kind:"number",name:"visitors"},
+                {label:"E-mail для связи:",kind:"shorttext",name:"email"},
+                {label:"Рубрика каталога:",kind:"combo",name:"division",
+                    variants:[{text:"здоровье",value:1},{text:"домашний уют",value:2},{text:"бытовая техника",value:3}]},
+                {label:"Размещение:",kind:"radio",name:"payment",
+                    variants:[{text:"бесплатное",value:1},{text:"платное",value:2},{text:"VIP",value:3}]},
+                {label:"Разрешить отзывы:",kind:"check",name:"votes"},
+                {label:"Описание сайта:",kind:"memo",name:"description"},
+                {label:"Опубликовать:",kind:"submit"},
+            ];
+
+            // параметры для содержимого формы 2
+            var formDef2=
+            [
+                {label:'Фамилия:',kind:'longtext',name:'lastname'},
+                {label:'Имя:',kind:'longtext',name:'firstname'},
+                {label:'Отчество:',kind:'longtext',name:'secondname'},
+                {label:'Возраст:',kind:'number',name:'age'},
+                {label:'Зарегистрироваться:',kind:'submit'},
+            ];
+            // создать содержимое форм
+            data2Form(adsForm, formDef1);
+            data2Form(regForm, formDef2);
+
+        })();
+        
+    </script>
+</body>
+
+</html>

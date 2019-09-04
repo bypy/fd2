@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>N.23 Домашнее задание DYN_FORM</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <div class="form-wrapper">
+            <form id="adsForm" class="dynform dynform--pink" method="POST" action="http://fe.it-academy.by/TestForm.php"
+                autocomplete="on" target="_blank">
+            </form>
+        </div>
+        <div class="form-wrapper">
+            <form id="regForm" class="dynform dynform--grey" method="GET" action="http://fe.it-academy.by/TestForm.php"
+                autocomplete="on" target="_blank">
+            </form>
+        </div>
+    </div>
+    <script src="form_builder.js"></script>
+    <script>
+        "use strict";
+        (function () {
+            // элемент первой формы
+            var adsForm = document.getElementById("adsForm");
+            // элемент второй формы
+            var regForm = document.getElementById("regForm");
+            // параметры для содержимого формы 1
+            var formDef1 =
+                [
+                    { label: "Название сайта:", kind: "longtext", name: "sitename" },
+                    { label: "URL сайта:", kind: "longtext", name: "siteurl" },
+                    { label: "Посетителей в сутки:", kind: "number", name: "visitors" },
+                    { label: "E-mail для связи:", kind: "shorttext", name: "email" },
+                    {
+                        label: "Рубрика каталога:", kind: "combo", name: "division",
+                        variants: [{ text: "здоровье", value: 1 }, { text: "домашний уют", value: 2 }, { text: "бытовая техника", value: 3 }]
+                    },
+                    {
+                        label: "Размещение:", kind: "radio", name: "payment",
+                        variants: [{ text: "бесплатное", value: 1 }, { text: "платное", value: 2 }, { text: "VIP", value: 3 }]
+                    },
+                    { label: "Разрешить отзывы:", kind: "check", name: "votes" },
+                    { label: "Описание сайта:", kind: "memo", name: "description" },
+                    { label: "Опубликовать:", kind: "submit" },
+                ];
+            // параметры для содержимого формы 2
+            var formDef2 =
+                [
+                    { label: 'Фамилия:', kind: 'longtext', name: 'lastname' },
+                    { label: 'Имя:', kind: 'longtext', name: 'firstname' },
+                    { label: 'Отчество:', kind: 'longtext', name: 'secondname' },
+                    { label: 'Возраст:', kind: 'number', name: 'age' },
+                    { label: 'Зарегистрироваться:', kind: 'submit' },
+                ];
+            // создать содержимое форм
+            data2Form(adsForm, formDef1);
+            data2Form(regForm, formDef2);
+        })();
+
+    </script>
+</body>
+
+</html>

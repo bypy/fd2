@@ -1,0 +1,231 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>DRINKS_HASH</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="button-row">
+            <button onclick="addDrink(drinkStorage)">ввод информации о напитке</button>
+            <button onclick="getDrink(drinkStorage)">получение информации о напитке</button>
+        </div>
+        <div class="button-row">
+            <button onclick="remDrinkData(drinkStorage)">удаление информации о напитке</button>
+            <button onclick="getDrinkList(drinkStorage)">перечень всех напитков</button>
+        </div>
+        <div class="secret-row hidden">
+        </div>
+    </div>
+    <script src="HashStorage.js"></script>
+    <script>
+
+        var drinkStorage = new HashStorage();
+        
+        // обработка кнопки "ввод информации о напитке"
+        function addDrink(storage) {
+            var drinkName,
+                isStrong,
+                recipeText;
+            
+            function remSpaces(text) {
+                // удаление пробелов в начале либо конце пользовательского ввода
+                // и удаление двух и более пробелов подряд между словами
+                return text.trim().replace(/\s{2,}/, " ");
+            }
+
+            function drinkInfo2Hash(alcFlag, recipe) {
+                // формирует хэш данных о коктейле
+                var resultHash = {};
+                var alcoFieldName = "алкогольный";
+                var recipeFieldName = "рецепт приготовления";
+
+                resultHash[alcoFieldName] = (alcFlag) ? "да" : "нет" ;
+                resultHash[recipeFieldName] = recipe;
+                return resultHash;
+            }
+            
+            // запрашиваем название напитка
+            do {
+                drinkName = prompt("Введите название напитка");
+            } while ( !drinkName );
+
+            // уточняем алкогольный ли напиток
+            isStrong = confirm("Этот напиток алкогольный? Нажмите \"Отмена\", если нет");
+
+         
+            // запрашиваем рецепт напитка
+            do {
+                recipeText = prompt("Добавьте рецепт получения напитка");
+            } while ( !recipeText );
+
+            // удаление лишних пробелов
+            drinkName = remSpaces(drinkName);
+            recipeText = remSpaces(recipeText);
+                        
+            // перед записью в хэш приводим название коктейля к нижнему регистру
+            drinkName = drinkName.toLowerCase();
+
+
+            // формируем хэш с данными о напитке
+            // алкогольный/безалкогольный и рецепт
+            var record = drinkInfo2Hash(isStrong, recipeText);
+
+            // передаем по ссылке методу объекта
+            // имя напитка и хэш с данными о напитке
+            storage.addValue(drinkName, record);
+        }
+
+
+        // обработка кнопки "получение информации о напитке"
+        function getDrink(storage) {
+            var drinkName,
+            resultData,
+            outputNodeClass = ".secret-row";
+
+            // запрашиваем название напитка
+            do {
+                drinkName = prompt("Введите название напитка");
+            } while ( !drinkName );
+            
+            // удаление лишних пробелов
+            drinkName = remSpaces(drinkName);
+
+            function remSpaces(text) {
+                // удаление возможных пробелов в начале либо конце
+                // и удаление двух и более пробелов подряд между словами
+                return text.trim().replace(/\s{2,}/, " ");
+            }
+            
+            // перед поиском в хэше приводим название коктейля к нижнему регистру
+            drinkName = drinkName.toLowerCase();
+            
+            resultData = storage.getValue(drinkName);
+            var resultMarkup = makeResult(drinkName, resultData);
+            var targetNode = document.querySelector(outputNodeClass);
+            showResult(resultMarkup, targetNode)
+            
+            // формируем innerHTML для добавления на страницу 
+            function makeResult(name, data) {
+                var parText = "";
+                var nameField = "напиток"
+                var alcoFieldName = "алкогольный";
+                var recipeFieldName = "рецепт приготовления";
+
+                if ( !data ) parText = "Данные о напитке <b>" + name + "</b> отсутствуют в хранилище!";
+                else {
+                    parText += nameField + " " + makeTitledDrinkName(name) + "<br>";
+                    if ( alcoFieldName in data ) {
+                        parText += alcoFieldName + ": " + data[alcoFieldName] + "<br>";
+                    }
+                    if ( recipeFieldName in data ) {
+                        parText += recipeFieldName + ": " + data[recipeFieldName];
+                    }
+                }
+                return parText;
+            }
+
+            // добавление результата на страницу
+            function showResult(markup, outNode) {
+                // если информация уже отображается - удалить
+                if ( outNode.textContent.length > 0) outNode.textContent = null;
+                var par = document.createElement('p');
+                par.innerHTML = markup;
+                outNode.appendChild(par);
+                // снять скрытое состояние div-a если надо
+                if ( outNode.classList.contains("hidden") ) outNode.classList.remove("hidden");
+            }
+
+            // приводит название напитка к красивому виду "Название Напитка"
+            function makeTitledDrinkName(name) {
+                // перед выводом пользователю
+                // имена приводятся к красивому виду "Имя Коктейля"
+                var titledName = name
+                    .split(" ") // разбили в массив
+                    .map(function(word){
+                        return word[0].toUpperCase() + word.slice(1).toLowerCase();
+                    }) // в новом массиве первые буквы слов в верхнем регистре
+                    .join(" "); // и сцепка элементов массива в строку
+                return titledName;
+            }
+        }
+
+
+        // обработка кнопки "удаление информации о напитке"
+        function remDrinkData(storage) {
+            var drinkName,
+            resultData,
+            outputNodeClass = ".secret-row";
+
+            // запрашиваем название напитка
+            do {
+                drinkName = prompt("Введите название напитка");
+            } while ( !drinkName );
+            
+            var origName = drinkName; // для уведомления, если напиток не найдется
+            // удаление лишних пробелов
+            drinkName = remSpaces(drinkName);
+
+            function remSpaces(text) {
+                // удаление возможных пробелов в начале либо конце
+                // и удаление двух и более пробелов подряд между словами
+                return text.trim().replace(/\s{2,}/, " ");
+            }
+            
+            // перед поиском в хэше приводим название коктейля к нижнему регистру
+            drinkName = drinkName.toLowerCase();
+
+            resultData = storage.deleteValue(drinkName);
+            resultMarkup = ( !resultData ) ?
+                "Данные о напитке <b>" + origName + "</b> отсутствуют в хранилище!"
+                :
+                "Данные о напитке <b>" + origName + "</b> удалены из хранилища!";
+            
+            var targetNode = document.querySelector(outputNodeClass);
+            showResult(resultMarkup, targetNode)
+            
+            // добавление результата на страницу
+            function showResult(markup, outNode) {
+                // если информация уже отображается - удалить
+                if ( outNode.textContent.length > 0) outNode.textContent = null;
+                var par = document.createElement('p');
+                par.innerHTML = markup;
+                outNode.appendChild(par);
+                // снять скрытое состояние div-a если надо
+                if ( outNode.classList.contains("hidden") ) outNode.classList.remove("hidden");
+            }
+            
+            
+        }
+
+
+        // обработка кнопки "перечень всех напитков"
+        function getDrinkList(storage) {
+            var resultData,
+            outputNodeClass = ".secret-row";
+            resultData = storage.getKeys();
+            resultMarkup = "Список всех напитков:<br> " + resultData.toString().split(",").join(", ");
+
+            var targetNode = document.querySelector(outputNodeClass);
+            showResult(resultMarkup, targetNode)
+
+            // добавление результата на страницу
+            function showResult(markup, outNode) {
+                // если информация уже отображается - удалить
+                if ( outNode.textContent.length > 0) outNode.textContent = null;
+                var par = document.createElement('p');
+                par.innerHTML = markup;
+                outNode.appendChild(par);
+                // снять скрытое состояние div-a если надо
+                if ( outNode.classList.contains("hidden") ) outNode.classList.remove("hidden");
+            }
+
+        }
+
+    </script>
+</body>
+
+</html>

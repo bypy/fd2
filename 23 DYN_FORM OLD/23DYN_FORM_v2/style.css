@@ -1,0 +1,96 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 62.5%;
+    box-sizing: border-box;
+}
+
+* {
+    box-sizing: inherit;
+}
+
+.page-wrapper {
+    width: 100%;
+    min-width: 400px;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: 100vh;
+    padding: 1px 1em 3em;
+}
+
+.form-wrapper {
+    margin: 3em auto 0;
+    width: 100%;
+    min-width: 600px;
+    max-width: 1000px;
+}
+
+.dynform {
+    padding: 3em;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 1em;
+    background: transparent;
+}
+
+.dynform.dynform--pink {
+    border-color: #be4f83;
+    background-color: antiquewhite; 
+}
+
+.dynform p {
+    margin: 0;
+}
+
+.dynform p + p {
+    margin-top: 1.5em;
+}
+
+.dynform label {
+    margin-right: 2ex;
+}
+
+.dynform label > span {
+    display: inline-block;
+    width: 210px;
+}
+
+.dynform label,
+.dynform button,
+.dynform input,
+.dynform select {
+    font-size: 140%;
+    font-weight: 700;
+    color: #bf3274;
+}
+
+.dynform input,
+.dynform select {
+    border: 1px solid #bf3274;
+    padding: .25em;
+}
+
+.dynform button {
+    border: 1px solid #bf3274;
+    padding: 1em;
+}
+
+.dynform textarea {
+    display: block;
+    width: 100%;
+    border: 1px solid #bf3274;
+    padding: 1em;
+    font-weight: 700;
+    color: #bf3274;
+}
+
+.dynform div {
+    margin-top: 3em;
+}
+
+.dynform input[type="submit"] {
+    border-radius: .5em;
+    padding: 1em;
+    cursor: pointer;
+}

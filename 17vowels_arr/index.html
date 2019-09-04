@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>VOWELS_ARR</title>
+</head>
+<body>
+<script>
+
+
+(function(){
+	
+	var userText = prompt("Введите текст из русских "
+	   + "слов для подсчета гласных букв");
+	var userTextArr = userText.split("");
+	
+	var vowelsList = {
+		а: "",
+		е: "",
+		ё: "",
+		и: "",
+		о: "",
+		у: "",
+		ы: "",
+		э: "",
+		я: ""
+	};
+	
+	// forEach
+	var vowSumByForeach = function(charArr){
+		var vowelsSum=0;
+		charArr.forEach(function(chr){
+			if ( chr.toLowerCase() in vowelsList ) {
+				vowelsSum++;
+			}
+		});
+		return vowelsSum;
+	}
+	console.log("Методом foreach найдено гласных букв: " + 
+					vowSumByForeach(userTextArr) + " шт." );
+	
+	
+	// filter
+	var vowSumByFilter = function(charArr){
+		var filteredVowels = charArr.filter(function(chr){
+			return ( chr.toLowerCase() in vowelsList )
+		});
+		return filteredVowels.length;
+	}
+	console.log("Методом filter найдено гласных букв: " + 
+					vowSumByFilter(userTextArr) + " шт." );
+	
+	
+	// reduce
+	var vowSumByReduce = function(charArr){
+		return charArr.reduce(function(currVowNum, chr){
+			if ( chr.toLowerCase() in vowelsList ) return ++currVowNum 
+			else return currVowNum;
+		}, 0)
+	}
+	console.log("Методом reduce найдено гласных букв: " + 
+					vowSumByReduce(userTextArr) + " шт." );
+
+	// Информационныетехнологии
+	// 12
+
+})();
+
+  
+
+</script>
+
+</body>
+</html>

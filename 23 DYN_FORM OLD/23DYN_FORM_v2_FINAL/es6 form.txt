@@ -1,0 +1,12 @@
+"use strict";
+function makeHtmlTag(tagName, attrs) {
+    let tag = document.createElement(tagName);
+    for ( let attr in attrs) {
+        tag.setAttribute(attr, attrs[attr]);
+    }
+    return tag;
+}
+
+var name = "table";
+var attrs = {width: "500", heigh: "600", border: "2"};
+var tableEl = makeHtmlTag(name,attrs);

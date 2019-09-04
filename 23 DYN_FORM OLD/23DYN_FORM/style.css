@@ -1,0 +1,90 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 62.5%;
+    box-sizing: border-box;
+}
+
+* {
+    box-sizing: inherit;
+}
+
+.page-wrapper {
+    width: 100%;
+    min-width: 400px;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: 100vh;
+    padding: 0 1em 0;
+}
+
+.form-wrapper {
+    margin: 4em auto 0;
+    width: 100%;
+    min-width: 710px;
+    max-width: 1000px;
+}
+
+.formstyle {
+    padding: 3em;
+    border: 2px solid #be4f83;
+    border-radius: 1em;
+    background-color: antiquewhite;
+}
+
+.formstyle p {
+    margin: 0;
+}
+
+.formstyle p + p {
+    margin-top: 1.5em;
+}
+
+.formstyle label {
+    margin-right: 2ex;
+}
+
+.formstyle .fixed-width {
+    display: inline-block;
+    width: 210px;
+}
+
+.formstyle span,
+.formstyle button,
+.formstyle input,
+.formstyle select {
+    font-size: 140%;
+    font-weight: 700;
+    color: #bf3274;
+}
+
+.formstyle input,
+.formstyle select {
+    border: 1px solid #bf3274;
+    padding: .25em;
+}
+
+.formstyle button {
+    border: 1px solid #bf3274;
+    padding: 1em;
+}
+
+.formstyle textarea {
+    display: block;
+    width: 100%;
+    border: 1px solid #bf3274;
+    padding: 1em;
+    font-weight: 700;
+    color: #bf3274;
+}
+
+.formstyle .btn {
+    margin-top: 3em;
+}
+
+.btn input {
+    border-radius: .5em;
+    padding: 1em;
+    cursor: pointer;
+}

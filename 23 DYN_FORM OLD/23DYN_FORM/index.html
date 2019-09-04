@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>N.23 Домашнее задание DYN_FORM</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <div class="form-wrapper">
+            <form id="form1" class="formstyle" method="POST" action="http://fe.it-academy.by/TestForm.php" autocomplete="off" target="_blank">
+                <p>
+                    <label for="sitename">
+                        <span class="fixed-width">Название сайта:</span>
+                    </label>
+                    <input id="sitename" type="text" name="sitename" size="70">
+                </p>
+                <p>
+                    <label for="siteurl">
+                        <span class="fixed-width">URL сайта:</span>
+                    </label>
+                    <input id="siteurl" type="text" name="siteurl">
+                </p>
+                <p>
+                    <label for="visitors">
+                            <span class="fixed-width">Посетителей в сутки:</span>
+                    </label>
+                    <input id="visitors" type="number" name="visitors">
+                </p>
+                <p>
+                    <label for="email">
+                            <span class="fixed-width">E-mail для связи:</span>
+                    </label>
+                    <input id="email" type="text" name="email">
+                </p>
+                <p>
+                    <label for="division">
+                            <span class="fixed-width">Рубрика каталога:</span>
+                    </label>
+                    <select id="division" name="division">
+                        <option value="1">здоровье</option>
+                        <option value="2">домашний </option>
+                        <option value="3">бытовая техника</option>
+                    </select>
+                </p>
+                <p>
+                    <label for=""><span class="fixed-width">Размещение:</span></label>
+                    <input type="radio" id="paymentCh1" name="payment" value="1">
+                    <label for="paymentCh1"><span>бесплатное</span></label>
+                    <input type="radio" id="paymentCh2" name="payment" value="2">
+                    <label for="paymentCh2"><span>платное</span></label>
+                    <input type="radio" id="paymentCh3" name="payment" value="3">
+                    <label for="paymentCh3"><span>VIP</span></label>
+                </p>
+                <p>
+                    <label for="votes"><span>Разрешить отзывы:</span></label>
+                    <input type="checkbox" id="votes" name="votes" checked>
+                </p>
+                <p>
+                    <label for="description"><span>Описание сайта:</span></label>
+                    <textarea name="description" id="description" rows="3"></textarea>
+                </p>
+                <div class="btn">
+                    <input type="submit" value="Опубликовать">
+                </div>
+
+            </form>
+            <form id="form2" class="formstyle" method="POST" action="http://fe.it-academy.by/TestForm.php" target="_blank">
+            </form>
+        </div>
+    </div>
+    <script>
+        var myForm = document.getElementById("form2");
+        var formDef1=
+        [
+            {label:"Название сайта:",kind:"longtext",name:"sitename"},
+            {label:"URL сайта:",kind:"longtext",name:"siteurl"},
+            {label:"Посетителей в сутки:",kind:"number",name:"visitors"},
+            {label:"E-mail для связи:",kind:"shorttext",name:"email"},
+            {label:"Рубрика каталога:",kind:"combo",name:"division",
+                variants:[{text:"здоровье",value:1},{text:"домашний уют",value:2},{text:"бытовая техника",value:3}]},
+            {label:"Размещение:",kind:"radio",name:"payment",
+                variants:[{text:"бесплатное",value:1},{text:"платное",value:2},{text:"VIP",value:3}]},
+            {label:"Разрешить отзывы:",kind:"check",name:"votes"},
+            {label:"Описание сайта:",kind:"memo",name:"description"},
+            {label:"Опубликовать:",kind:"submit"},
+        ];
+    </script>
+    <script src="dynform.js"></script>
+</body>
+
+</html>

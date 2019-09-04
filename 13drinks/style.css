@@ -1,0 +1,92 @@
+html {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+* {
+    box-sizing: inherit;
+}
+body {
+    margin: 0;
+    padding: 0;
+    font-size: 62.5%;
+}
+.wrapper {
+    width: 100%;
+    padding: 1px 5px 0 5px;
+}
+.button-row {
+    width: auto;
+    width: min-content;
+    margin: 20px auto 0;
+    text-align: center;
+}
+.button-row:first-child {
+    margin-top: 100px;
+}
+.button-row + .secret-row {
+    margin-top: 2.5em;
+}
+button {
+    font-family: inherit;
+    font-size: 200%;
+    font-weight: bold;
+    line-height: normal;
+    padding: 0.5em 0.75em;
+    color: #554343;
+}
+button+button {
+    margin-top: 20px;
+}
+.secret-row {
+    padding: 0 .5em;
+    border: #554343 dashed 2px;
+    margin-bottom: 1em;
+    background-color: #f4f1f1;
+    text-align: center;
+    font-size: 180%;
+}
+.secret-row.hidden {
+    min-height: 1.5em;
+    display: none;
+}
+
+@media only screen and (min-width: 420px) {
+    .wrapper {
+        width: 95%;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .button-row {
+        width: auto;  
+        padding: 0 60px;
+        margin-top: 20px;
+    }
+    button {
+        display: block;
+        width: 100%;
+        margin: 0 auto;
+    }
+    .secret-row {
+        padding-top: 1em;
+        padding-bottom: 1em;
+    }
+}
+
+@media only screen and (min-width: 800px) {
+    .button-row {
+        overflow: hidden;
+        padding: 0; 
+    }
+    .button-row:first-child {
+        margin-top: calc(50vh - 100px);
+    }
+    button {
+        float: left;
+        max-width: 48%;
+        max-width: calc(50% - 10px);
+    }
+    button + button {
+        margin-top: 0;
+        float: right;
+    }
+}

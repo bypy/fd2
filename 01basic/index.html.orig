@@ -1,0 +1,166 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        html {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        * {
+            box-sizing: inherit;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-size: 62.5%;
+        }
+        .wrapper {
+            width: 100%;
+            padding: 1px 5px 0 5px;
+        }
+        .button-row {
+            width: auto;
+            width: min-content;
+            margin: calc(50vh - 100px) auto 0;
+            text-align: center;
+        }
+        .button-row + * {
+            margin-top: 5em;
+        }
+        button {
+            font-size: 200%;
+            line-height: normal;
+            padding: 0.5em 0.75em;
+            color: #502050;
+        }
+        button+button {
+            margin-top: 1em;
+        }
+        .secret-row {
+            background-color: #e1e1e1;
+            padding: .5em 0;
+            text-align: center;
+            margin-bottom: 1em;
+        }
+        .secret-row.hidden {
+            min-height: 1.5em;
+            visibility: hidden;
+        }
+        .country,
+        .capital {
+            display: inline-block;
+            width: 50%;
+            font-size: 200%;
+            font-weight: bolder;
+            color: #554343;
+        }
+        .country {
+            border-right-style: double;
+            border-right-color: #554343;
+        }
+
+        @media only screen and (min-width: 420px) {
+            .wrapper {
+                width: 95%;
+                max-width: 800px;
+                margin: 0 auto;
+            }
+            .button-row {
+                width: auto;  
+                padding: 0;
+                margin: calc(50vh - 100px) auto 0;
+            }
+            button {
+                display: block;
+                width: auto;
+                max-width: max-content;
+                margin: 0 auto;
+            }
+            .secret-row {
+                padding-top: 1em;
+                padding-bottom: 1em;
+            }
+            .country,
+            .capital {
+                font-size: 250%;
+            }
+        }
+
+        @media only screen and (min-width: 800px) {
+            .button-row {
+                overflow: hidden;
+            }
+            button {
+                float: left;
+            }
+            button + button {
+                margin-top: 0;
+                float: right;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="button-row">
+            <button onclick="getCountryAndCapital()">Ввод информации о стране</button>
+            <button onclick="">Получение информации о стране</button>
+        </div>
+        <div class="secret-row">
+            <span class="country">Беларусь</span><!--
+        --><span class="capital">Минск</span>
+        </div>
+        <div class="secret-row">
+            <span class="country">Россия</span><!--
+        --><span class="capital">Москва</span>
+        </div>
+        <div class="secret-row hidden">
+            <span class="country">Украина</span><!--
+        --><span class="capital">Киев</span>
+        </div>
+        <div class="secret-row hidden">
+            <span class="country">Казахстан</span><!--
+        --><span class="capital">Нур-Султан</span>
+        </div>
+
+    </div>
+    <script src="02countries.js"></script>
+    <script>
+    /*jshint strict:false */
+    function getCountryAndCapital() {
+        var country = prompt("Введите название страны");
+
+        while (!isValid(country)) {
+            country = prompt("Ошибка. Повторите ввод названия страны");
+        }
+        if (isCancel(country)) return;
+
+        var capital = prompt("Введите название столицы");
+        while (!isValid(capital)) {
+            capital = prompt("Ошибка. Повторите ввод названия страны");
+        }
+        if (isCancel(capital)) return;        
+
+        addCountry(makeTitle(country), makeTitle(capital));
+    }
+
+    function isValid(inputS) {
+        var valid = inputS === null || (Number(inputS) !== 0 && isNaN(parseInt(inputS)));
+        return valid;
+    }
+
+    function isCancel(promptAnswer) {
+        return (promptAnswer === null);
+    }
+
+    function makeTitle(word) {
+        return word.toLowerCase().replace(word[0], word[0].toUpperCase());
+    }
+    </script>
+</body>
+
+</html>

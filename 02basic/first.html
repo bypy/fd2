@@ -1,0 +1,112 @@
+<script src="/storage/sdcard0/Download/jquery.min.js"></script>
+<script src="countries.js"></script>
+    <script>
+    /*jshint strict:false */
+
+
+    // загрузка внешнего хэша с полным составом стран и столиц
+    var countriesHash;
+    var hArr;
+    var propList = [];
+    jQuery.ajax({
+        url: "countries.json",
+        type: "GET",
+        contentType: 'application/json; charset=utf-8',
+        success: function(allCountries) {
+        	countriesHash = makeHash(allCountries);
+        	hArr = makePropList(countriesHash);
+        	hArr.sort(sortNumeric);
+        	//printArray(hArr);
+        	var charNum = 5; // get from input
+        	var charNumMatches = findMatches(hArr, charNum);
+        	// отбросить первые элементы в каждом массиве и сортировать
+        	charNumMatches.forEach(function(item){
+        		item.shift();
+        	});
+        	charNumMatches.sort(sortNumeric);
+        	var vowelsNum = 3; // get from input
+        	var vowelsNumMatches = findMatches(charNumMatches, vowelsNum );
+        	//printArray(charNumMatches);
+        	printArray(vowelsNumMatches);
+        	
+            console.log("OK");
+        },
+        error : function(jqXHR, textStatus, errorThrown) {
+            console.log("Failed to get countries: ", errorThrown);
+            countriesHash = {};
+        },
+    });
+    
+    function findMatches(arr, needle) {
+    	var start,
+    		end;
+    	alert(arr[0]);
+    	for (var c=0; c<arr.length; c++) {
+    		//console.log(arr[c] + "..." + arr[c][depth]);
+    		if ( arr[c][0] < needle) {
+    			continue;
+    		}
+    		if ( start === undefined ) {
+    			start = c;
+    		}
+			if ( arr[c][0] === needle ) {
+    			continue;
+    		}
+    		end = c;
+    		break;
+    	}
+    	var rs = arr.slice(start, end);
+    	
+ 		//console.log(rs);
+ 		return rs;
+    }
+    
+    function sortNumeric(a, b) {
+    	return a[0]-b[0];
+    }
+
+    function removeAllButLetters(word) {
+    	word = word.replace(" и ", "");
+    	return word.replace(/[\s-]/mg, "").toUpperCase();
+    }
+    
+    function makeHash(str) {
+    	var myHash = {};
+    	var kvPairs;
+    	str = str.slice(1, str.length-2).replace(/"/mg, "");
+    	kvPairs = str.split(",");
+    	var k,v;
+    	for (var arrInd=0; arrInd<kvPairs.length; arrInd++) {
+    		keyValueArray = kvPairs[arrInd].split(":");
+    		k=keyValueArray[0].trim();
+    		v=keyValueArray[1].trim();
+    		myHash[k] = v;
+    	}
+    	return myHash;
+    }
+    	
+    
+    
+    function getVowels(word) {
+    	var allVowels = "АЕЁИОУЫЭЮЯ";
+    	var vowelsList = [];
+
+		for (var i = 0; i < word.length; i++) {
+			matchPos = allVowels.indexOf(word[i]);
+			if (matchPos !== -1) {
+				vowelsList.push(word[i]);
+			}
+		}
+    	
+    	return vowelsList;
+    }
+    
+    
+    function printArray(arr) {
+    	for (var i=0; i<arr.length; i++) {
+    		console.log(arr[i]);
+    	}
+    }
+
+
+    </script>

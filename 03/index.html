@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Рекурсия</title>
+</head>
+<body>
+	<script src="array_sum.js"></script>
+  <script>
+    arr1 = [ 5, 7, 
+        [ 4, [2], 8, [1,3], 2 ], 
+        [ 9, [] ], 
+        1, 8
+      ];
+    alert( "Сумма массива " + arr1.toSource() + " = " + countArraySum(arr1) ); //50
+    arr2 = [1,7,"8.9",null,[], [1,8], 4, [[4, NaN], [4,[5], 7], 9]];
+    alert( "Сумма массива " + arr2.toSource() + " = " + countArraySum(arr2) );
+  </script>
+</body>
+</html>

@@ -1,0 +1,217 @@
+:root {
+    --label-left-margin: 200px;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 62.5%;
+    box-sizing: border-box;
+    background: #4d4c4c;
+}
+
+* {
+    box-sizing: inherit;
+}
+
+.page-wrapper {
+    width: 100%;
+    min-width: 400px;
+    max-width: 1200px;
+    margin: 2em 0 auto;
+    min-height: 100vh;
+    padding: 1px 1em 3em;
+}
+
+.form-wrapper {
+    margin: 0 auto 8em;
+    width: 100%;
+    min-width: 600px;
+    max-width: 1200px;
+}
+
+.dynform {
+    padding: 3em;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 1em;
+    background: transparent;
+}
+
+.dynform p {
+    margin: 0;
+}
+
+.dynform p:nth-child(n+2) {
+    margin-top: 1.5em;
+}
+
+.dynform label > span {
+    display: inline-block;
+    width: 200px;
+    width: var(--label-left-margin);
+}
+
+.dynform button,
+.dynform input,
+.dynform select,
+.dynform textarea {
+    border-width: 1px;
+    border-style: solid;
+}
+
+.dynform input,
+.dynform select,
+.dynform label {
+    font-size: 140%;
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+.dynform input,
+.dynform select {
+    padding: .25em;
+}
+
+.dynform textarea {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    display: inline-block;
+    width: 100%;
+    padding: .5em;
+    margin-bottom: .5em;
+}
+
+.dynform input[type="submit"] {
+    font-weight: 700;
+    border-radius: .5em;
+    padding: 1em;
+    background: #fff;
+    cursor: pointer;
+}
+
+.dynform .warning {
+    color: #F33;
+    border-color: #F33;
+}
+
+.dynform span.warning {
+    font-size: 120%;
+    font-weight: 700;
+    display: inline-block;
+    margin-left: .75em;
+}
+
+.dynform span.warning.absolute {
+    position: absolute;
+    right: -5000px;
+}
+
+.dynform .warnborder {
+    border-color: #F33;
+}
+
+.dynform .warnborder:focus {
+    box-shadow: 0 2px 2px 2px inset rgba(255, 51, 51, .25);
+}
+
+.dynform textarea + span.warning {
+    margin-left: 0;
+}
+
+.dynform p > label[for="description"] {
+    display: inline-block;
+    margin-bottom: .5em;
+}
+
+.dynform p > label[for="payment"] {
+    display: inline-block;
+    margin: 2em 2em 0 0;
+}
+
+/* PINK STYLE */
+.dynform.dynform--pink {
+    color: #bf3274;
+    border-color: #bf3274;
+    background-color: antiquewhite; 
+}
+
+.dynform--pink button,
+.dynform--pink input,
+.dynform--pink select,
+.dynform--pink textarea {
+    border-color: #bf3274;
+}
+
+.dynform--pink input[type="submit"] {
+    color: #bf3274;   
+}
+
+/* GREY STYLE */
+.dynform.dynform--grey {
+    color: #4d4c4c;
+    border-color: #4d4c4c;
+    background-color: #e0e0e0;
+}
+
+.dynform--grey button,
+.dynform--grey input,
+.dynform--grey select,
+.dynform--grey textarea {
+    border-color: #4d4c4c;
+}
+
+.dynform--grey input[type="submit"] {
+    color: #4d4c4c;   
+}
+
+
+/* AnimateCSS */
+@-webkit-keyframes shake {
+    0%,
+    to {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0)
+    }
+    20%,
+    60% {
+        -webkit-transform: translate3d(-6px, 0, 0);
+        transform: translate3d(-6px, 0, 0)
+    }
+    100% {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0)
+    }
+}
+
+@keyframes shake {
+    0%,
+    to {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0)
+    }
+    20%,
+    60% {
+        -webkit-transform: translate3d(-6px, 0, 0);
+        transform: translate3d(-6px, 0, 0)
+    }
+ 
+    100% {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0)
+    }
+}
+
+.shake {
+    -webkit-animation-name: shake;
+    animation-name: shake
+}
+
+.animated {
+    -webkit-animation-duration: 350ms;
+    animation-duration: 350ms;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both
+}

@@ -1,0 +1,234 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        html {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        * {
+            box-sizing: inherit;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-size: 62.5%;
+        }
+        .wrapper {
+            width: 100%;
+            padding: 1px 5px 0 5px;
+        }
+        .button-row {
+            width: auto;
+            width: min-content;
+            margin: 20px auto 0;
+            text-align: center;
+        }
+        .button-row:first-child {
+            margin-top: calc(50vh - 230px);
+        }
+        .button-row + .secret-row {
+            margin-top: 5em;
+        }
+        button {
+            font-family: inherit;
+            font-size: 200%;
+            font-weight: bold;
+            line-height: normal;
+            padding: 0.5em 0.75em;
+            color: #554343;
+        }
+        button+button {
+            margin-top: 20px;
+        }
+        .secret-row {
+            padding: .5em 0;
+            border: #554343 dashed 2px;
+            margin-bottom: 1em;
+            background-color: #f4f1f1;
+            text-align: center;
+        }
+        .secret-row.hidden {
+            min-height: 1.5em;
+            display: none;
+        }
+        .country,
+        .capital {
+            display: inline-block;
+            width: 50%;
+            font-size: 200%;
+            font-weight: bolder;
+            color: #554343;
+        }
+        .country {
+            border-right-style: dashed;
+            border-right-color: #554343;
+            border-right-width: 2px;
+        }
+
+        @media only screen and (min-width: 420px) {
+            .wrapper {
+                width: 95%;
+                max-width: 800px;
+                margin: 0 auto;
+            }
+            .button-row {
+                width: auto;  
+                padding: 0 60px;
+                margin-top: 20px;
+            }
+            .button-row:first-child {
+                margin-top: calc(50vh - 136px);
+            }
+            button {
+                display: block;
+                width: 100%;
+                margin: 0 auto;
+            }
+            .secret-row {
+                padding-top: 1em;
+                padding-bottom: 1em;
+            }
+            .country,
+            .capital {
+                font-size: 250%;
+            }
+        }
+
+        @media only screen and (min-width: 800px) {
+            .button-row {
+                overflow: hidden;
+                padding: 0; 
+            }
+            button {
+                float: left;
+                max-width: 48%;
+                max-width: calc(50% - 10px);
+            }
+            button + button {
+                margin-top: 0;
+                float: right;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="button-row">
+            <button onclick="setCountryData()">ввод информации о стране</button>
+            <button onclick="getCountryData()">получение информации о стране</button>
+        </div>
+        <div class="button-row">
+            <button onclick="getCountryAndCapital()">перечень всех стран</button>
+            <button onclick="">удаление информации о стране</button>
+        </div>
+        <div class="button-row">
+            <button onclick="getCountryAndCapital()">игра</button>
+        </div>
+        <div class="secret-row">
+            <span class="country">Беларусь</span><!--
+        --><span class="capital">Минск</span>
+        </div>
+        <div class="secret-row">
+            <span class="country">Россия</span><!--
+        --><span class="capital">Москва</span>
+        </div>
+        <div class="secret-row hidden">
+            <span class="country">Украина</span><!--
+        --><span class="capital">Киев</span>
+        </div>
+        <div class="secret-row hidden">
+            <span class="country">Казахстан</span><!--
+        --><span class="capital">Нур-Султан</span>
+        </div>
+    </div>
+    <script src="countries.js"></script>
+    <script src="functions.js"></script>
+
+    <script>
+        var a = done;
+        console.log(a());
+        
+        
+        
+        // var country = getCountry();
+        // if ( isCancelled(country) ) { return };
+        // var titledCountry = makeTitle(country);
+        // if ( isExistsInHash(titledCountry, countrysH) ) {
+        //     alert("Эта страна уже присутствует в списке");
+        //     return
+        // };
+        // var capital = getCapital();
+        // if ( isCancelled(capital) ) { return };
+        // var titledCapital = makeTitle(capital);
+
+        // // [*] прежде чем добавить что-то новое в наш хэш,
+        // // проверим, - а не фигню ли ввёл пользователь
+        
+        // // если проверка страны не удалась
+        // if ( !isExistsInHash(titledCountry, hash) ) {
+        //     // пробуем догадаться
+        //     var guessCountry = doCorrection(titledCountry, propList);
+        //     if ( guessCountry === titledCountry ) {
+        //         alert("Вы ввели несуществующую страну: \"" + country + "\"");
+        //     }
+
+        // }
+        
+        // // => return
+        // // иначе если проверка страны удалась
+        // // => проверка столицы
+        // // если проверка страны не удалась
+        // // => вывести confirm
+        // // записать правильную столицу или пользовательскую 
+
+
+
+        // var correctedData = [];
+        // if ( isCorrectData( titledCountry, titledCapital, worldCountriesH ) ) {
+        //     var warning = "Всё верно!\n";
+        //     var correctCapital = worldCountriesH[titledCountry];
+        //     if ( titledCapital === correctCapital) {
+        //         addCountry( titledCountry, titledCapital );
+        //     } else {
+        //         warning = "Внимание, название столицы исправлено!\n";
+        //         addCountry( titledCountry, correctCapital );
+        //     }
+        //     titledCapital = ( titledCapital === correctCapital) ? titledCapital : correctCapital;
+        //     alert(warning + "Страна \"" + titledCountry + "\" и её столица \"" + titledCapital + "\" добавлены!") // countries.js
+        // } else {
+        //     alert("Вероятно, вы сделали ошибку в написании страны.");
+        //     //correctedData = doCorrection(titledCountry, propList);
+        // }
+
+    // TODO addCountryToHash
+
+    // Кнопка "ввод информации о стране"
+        // (*)запросить страну для записи
+        // (*)валидировать ввод
+        // (*)проверять на корректность название страны
+        // (*)если есть единственная похожая - предложить исправление
+        // запросить название столицы
+        // записать в хэш своих стран
+    
+    // Кнопка "получение информации о стране"
+        // (*)запросить страну для вывода информации
+        // (*)валидировать ввод
+        // (*)проверять на корректность название страны
+        // (*)если есть единственная похожая - предложить исправление
+        // вывести информацию о стране (её столицу)
+    
+    // Кнопка "перечень всех стран"
+        // выдать в консоль перечень всех стран и их столиц
+    
+    // удаление информации о стране"
+        // выдать в консоль перечень всех стран и их столиц
+
+    </script>
+</body>
+
+</html>

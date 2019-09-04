@@ -1,0 +1,92 @@
+// console.time("new");
+// var start = 0;
+// var timer = setInterval(function(){
+//   console.log(++start);
+//   if ( start === 20) {
+//     clearInterval(timer);
+//     console.timeEnd("new");
+//   }
+// }, 100);
+
+
+
+// создать таймаут и функцию
+// назначать новый таймаут, пока не достигнут рубеж
+// (достигнут рубеж - не продлять)
+
+// function timeoutPlanning() {
+//     var count = 0;
+//     var tID = setTimeout(function printCounter() {
+//         console.log(++count);
+//         if ( count < 20 )
+//             setTimeout(printCounter, 100);
+//         else
+//             console.timeEnd("new");    
+//     }, 100);
+// }
+// console.time("new");
+// timeoutPlanning();
+
+// function printNumbersTimeout20_100() {
+//     var i = 1;
+//     var timerId = setTimeout(function go() {
+//       console.log(i);
+//       if (i < 20) setTimeout(go, 100); else console.timeEnd("new");
+//       i++;
+//     }, 100);
+//   }
+  
+//   // вызов
+//   console.time("new");
+//   printNumbersTimeout20_100();
+
+// var timer = setInterval(function() {
+//     i++;
+//   }, 10);
+  
+//   setTimeout(function() {
+//     clearInterval(timer);
+//     alert( i ); // (*)
+//   }, 100);
+  
+//   var i;
+  
+//   function f() {
+//     // точное время выполнения не играет роли
+//     // здесь оно заведомо больше 100 мс
+//     console.time("new");
+//     for (i = 0; i < 1e8; i++) f[i % 2] = i;
+//     console.timeEnd("new");
+//   }
+  
+//   f();
+
+
+// function delay(f, ms) {
+//     // вернуть функцию, которая принимает любое
+//     // количество аргументов
+//     // и запускает f через ms кол-во секунд
+//     return function() {
+//         var params = arguments;
+//         var self = this;
+//         setTimeout(function(){
+//             f.apply(self, params)
+//         }, ms);
+//     }
+// }
+
+// function f(x) {
+//     console.log("Рельно прошло " +
+//         (start - new Date().getTime()) + " мс");
+// }
+
+// //var f1000 = delay(f, 1000);
+// var f1500 = delay(f, 5000);
+
+// //f1000("тест"); // выведет "тест" через 1000 миллисекунд
+// var start = new Date().getTime();
+// f1500(correctedTO); // выведет "тест2" через 1500 миллисекунд
+
+
+// функция 1
+// привязать выполнение функции2 на этом объекте через N интервал

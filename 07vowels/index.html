@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Рекурсия</title>
+</head>
+<body>
+	<script src="count_vowels.js"></script>
+  <script>
+        "use strict";
+        (function(){
+            var userInput = prompt("Введите произвольную строку из русских букв");
+
+            var vowelsNum;
+            var t0, t1; // для замеров времени выполнения кода обоих вариантов функций
+            
+            /*
+            * вариант А
+            */
+            t0 = new Date();
+            vowelsNum = countCyrVowelsA(userInput);
+            t1 = new Date();
+            console.log("Число гласных букв в строке:", userInput, "\n");
+            console.log(vowelsNum + " шт."); // отдельный console.log удобен при больших строках  
+            console.log("Скорость решения через поиск вхождения символа в строку (в миллисекундах): "
+                        + (t1 - t0) + "\n\n");
+            
+            /*
+            * вариант Б
+            */
+            t0 = new Date();
+            vowelsNum = countCyrVowelsB(userInput);
+            t1 = new Date();
+            console.log("Число гласных букв в строке:", userInput, "\n");
+            console.log(vowelsNum + " шт.");
+            console.log("Скорость решения через поиск ключа в хэше (в миллисекундах): "
+                        + (t1 - t0) + "\n\n");
+        })();
+        
+    </script>
+</body>
+</html>

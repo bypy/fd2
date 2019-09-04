@@ -1,0 +1,620 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>37 CLOCK SVG</title>
+    <style>
+        html {
+            height: 100%;
+            margin: 0;
+            font: bold 18px monospace;
+        }
+
+        body {
+            margin: 0;
+            padding: 0 5vh;
+            min-height: 100%;
+            min-width: 200px;
+            background-color: rgb(64, 60, 75);
+        }
+                
+        ::-moz-focus-outer, ::-moz-focus-inner {
+            border: 0;
+            padding: 0;
+        }
+
+        .row {
+            margin: 1em auto 0;
+            max-width: 80vh;
+            min-width: 10em;
+            background-color: transparent;
+            text-align: center;
+        }
+
+        .col {
+            color: #ffc0cb;
+        }
+
+        .top-row {
+            padding-top: 5vh;
+            margin-top: 0;
+        }
+
+        button {
+            min-width: 30ex;
+            background-color: #ffc0cb;
+            border: none;
+            border-radius: 10em;
+            padding: .5em 1em;
+            text-align: center;
+            font-family: inherit;
+            font-size: inherit;
+            cursor: pointer;
+        }
+
+        button:active {
+            background-color: #ff5b77;
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        button:nth-of-type(1) {
+            left: 6%;
+        }
+
+        button:nth-of-type(2) {
+            right: 6%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="row top-row">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="clock" viewBox="0 0 100 100" preserveAspectRatio="xMidYMin meet">
+        </svg>
+    </div>
+    <div class="row">
+        <div class="col">
+            <span>Формат:</span>
+            <input type="radio" id="24h" name="time-format" value="24" checked><label for="24h">24ч</label>
+            <input type="radio" id="12h" name="time-format" value="12"><label for="12h">12ч</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <button id="vintage">Включить винтаж</button>
+        </div>
+    </div>
+    <script>
+        "use strict";
+        window.addEventListener("DOMContentLoaded", createClockElements);
+
+        // метод округления до двух разряда после точки
+        Number.prototype.round2 = function () {
+            return Math.round(this * 100) / 100;
+        }
+
+        function createSvgElem(ns, elemName, params) {
+            var newElem = document.createElementNS(ns, elemName);
+            params = params || {};
+            for (var k in params) {
+                newElem.setAttribute(k, params[k]);
+            }
+            return newElem;
+        }
+
+        function createClockElements() {
+            var svgEl = document.getElementById("clock");
+
+            /*
+            * ПАРАМЕТРЫ SVG КОНТЕЙНЕРА *
+            */
+
+            // размер стороны svg viewBox
+            // не предусмотрено редактирование
+            var MY_SVG_VIEWBOX_WIDTH = 100;
+
+            // X и Y-координата центра часов
+            var xyCenter = MY_SVG_VIEWBOX_WIDTH / 2;
+
+            var CLOCK_FRAME_WIDTH = 5;
+            var CLOCK_FRAME_RADIUS = 50 - CLOCK_FRAME_WIDTH/2; // это максимальный размер
+            var CLOCK_COLOR = "#fcca66";
+            var CLOCK_FRAME_COLOR = "orange";
+            // внутренний радиус часов
+            var CLOCK_FACE_RADIUS = CLOCK_FRAME_RADIUS - CLOCK_FRAME_WIDTH / 2;
+
+
+            /*
+            * ПАРАМЕТРЫ "ЦИФРОВОГО" ТАБЛО ЧАСОВ *
+            */
+
+            var LCD_WIDTH = 32; // vmin 
+            var LCD_HEIGHT = 7; // vmin
+            var LCD_FRAME_WIDTH = 0.5;
+            var LCD_TOP = 30;
+            // соотношение размера шрифта к высоте экранчика
+            var LCD_FONT_RATIO = 0.6
+            var LCD_TEXT_FONT_SIZE = LCD_HEIGHT * LCD_FONT_RATIO; // px
+
+            /*
+            * ПАРАМЕТРЫ ЦИФЕРБЛАТА *
+            */
+
+            // количество часов на циферблате
+            var CLOCK_LABELS_COUNT = 12;
+            var CLOCK_LABELS_STEP = 360 / CLOCK_LABELS_COUNT;
+
+            // расстояние от центра часов до центра отметки с часом
+            var CLOCK_LABEL_OFFSET = 37; // vmin
+
+            // радиус часовой отметки
+            var CLOCK_LABEL_RADIUS = 6;
+
+            // цвет часовой отметки
+            var CLOCK_LABEL_COLOR = "#48b382";
+
+            // цвет шрифта часовой отметки
+            var CLOCK_LABEL_FONT_COLOR = "#2b2a29";
+
+            // соотношение размера шрифта к высоте метки
+            var CLOCK_LABEL_FONT_RATIO = 0.6
+
+            // соотношение размера шрифта к размеру отметки с часом
+            var CLOCK_LABEL_FONT_SIZE = (2 * CLOCK_LABEL_RADIUS * CLOCK_LABEL_FONT_RATIO).round2();
+
+            /*
+            * ПАРАМЕТРЫ СТРЕЛОК *
+            */
+
+            // одинаковая для всех длина "хвоста" стрелки (вылет за ось вращения)
+            var TALE_LENGTH = 5; // vmin
+
+            // цвета стрелок
+            var HOUR_HAND_COLOR = "rgba(0,10,30,0.8)";
+            var MINUTE_HAND_COLOR = "rgba(0,10,30,0.8)";
+            var SECOND_HAND_COLOR = "rgba(0,10,30,0.8)";
+
+            // ширина стрелок
+            var HOUR_HAND_WIDTH = 5; // vmin
+            var MINUTE_HAND_WIDTH = 4; // vmin
+            var SECOND_HAND_WIDTH = 3; // vmin
+
+            // длина стрелок (в процентах от максимально возможной)
+            var HOUR_HAND_LENGTH = .7;
+            var MINUTE_HAND_LENGTH = .8;
+            var SECOND_HAND_LENGTH = .9;
+
+            // закругленный край стрелок
+            var ROUND_LINECAP = true;
+
+            // вычислим отступы от края svg вьюпорта до начала стрелок
+            var hourHandTop = (xyCenter - CLOCK_FACE_RADIUS * HOUR_HAND_LENGTH).round2();
+            var minuteHandTop = (xyCenter - CLOCK_FACE_RADIUS * MINUTE_HAND_LENGTH).round2();
+            var secondHandTop = (xyCenter - CLOCK_FACE_RADIUS * SECOND_HAND_LENGTH).round2();
+
+            var svgNS = svgEl.getAttribute("xmlns");
+            var params; // хэш с атрибутами для создания элемента
+
+            // группа, объединяющая все элементы часов
+            var clockGroup = createSvgElem(svgNS, "g", { id: "clockElements" });
+            // признак закругленных краев стрелок сохраним в атрибкт группы элементов часов
+            clockGroup.setAttribute("data-round-linecap", ROUND_LINECAP.toString());
+
+            // группа для элементов обычной "шкурки"
+            var normalClockGroup = createSvgElem(svgNS, "g", { id: "normalElements" });
+
+            // основание циферблата
+            params = {
+                cx: xyCenter, cy: xyCenter, r: CLOCK_FRAME_RADIUS,
+                fill: CLOCK_COLOR, stroke: CLOCK_FRAME_COLOR,
+                "stroke-width": CLOCK_FRAME_WIDTH, "stroke-opacity": 0.8
+            };
+            var clockFace = createSvgElem(svgNS, "circle", params);
+
+            // электронное табло
+            var lcdX = xyCenter - LCD_WIDTH / 2;
+            var lcdY = LCD_TOP;
+            params = {
+                x: lcdX, y: lcdY, width: LCD_WIDTH, height: LCD_HEIGHT,
+                fill: "white", stroke: CLOCK_FRAME_COLOR, id: "lcdScreen",
+                "stroke-width": LCD_FRAME_WIDTH
+            };
+            var lcd = createSvgElem(svgNS, "rect", params);
+
+            // время текстом
+            var lcdTextY = lcdY + LCD_HEIGHT / 2 + LCD_TEXT_FONT_SIZE / 2;
+            params = {
+                x: xyCenter, y: lcdTextY, fill: "navy", stroke: "none", id: "lcd",
+                "font-family": "Consolas, monospace",
+                "font-size": LCD_TEXT_FONT_SIZE, "text-anchor": "middle",
+                "dy": -1 * LCD_FRAME_WIDTH
+            };
+            var lcdText = createSvgElem(svgNS, "text", params);
+
+            // циферблат
+            // основание циферблата
+            params = {
+                cx: xyCenter, cy: xyCenter, r: CLOCK_FRAME_RADIUS,
+                fill: "yellow", stroke: "orange",
+                "stroke-width": CLOCK_FRAME_WIDTH, "stroke-opacity": 0.8
+            };
+            var hourNum = createSvgElem(svgNS, "circle", params);
+
+            // группа элементов "часовые отметки"
+            // общие параметры
+            params = { id: "labels-normal", fill: CLOCK_LABEL_COLOR, stroke: "none"};
+            var labelsNormalGroup = createSvgElem(svgNS, "g", params);
+
+            //for (var i=0; i<CLOCK_LABELS_COUNT; i++) {
+            for (var i=1; i<=12; i++) {
+                // группа "отметка + текст"
+                var hourLabelGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+
+                params = { cx: xyCenter, cy: xyCenter - CLOCK_LABEL_OFFSET, r: CLOCK_LABEL_RADIUS };
+                var hourLabel = createSvgElem(svgNS, "circle", params);
+
+                // номер метки часа
+                var hourLabelTextY = xyCenter - CLOCK_LABEL_OFFSET +
+                    (CLOCK_LABEL_FONT_SIZE/2 - CLOCK_LABEL_FONT_SIZE/6);
+                    // смещение на половину размера шрифта с учетом что
+                    // соотношение (line-height - CLOCK_LABEL_FONT_SIZE) к CLOCK_LABEL_FONT_SIZE
+                    // = 1/6 как-то так..
+                params = {
+                    x: xyCenter, y: hourLabelTextY.round2(), fill: CLOCK_LABEL_FONT_COLOR,
+                    stroke: "none", id: "lcd", "text-anchor": "middle",
+                    "font-family": "Consolas, monospace", "font-size": CLOCK_LABEL_FONT_SIZE
+                };
+                var hourLabelText = createSvgElem(svgNS, "text", params);
+                hourLabelText.textContent = i;
+
+                // поворот вокруг центра метки (компенсация последующего поворота всей метки)
+                var rotateValue = "rotate(" + -1*CLOCK_LABELS_STEP*i + "," + xyCenter + "," +
+                                            (xyCenter - CLOCK_LABEL_OFFSET) + ")";
+                hourLabelText.setAttribute("transform", rotateValue);
+
+                hourLabelGroup.appendChild(hourLabel);
+                hourLabelGroup.appendChild(hourLabelText);
+                // поворот относительно центра часов
+                var rotateValue = "rotate(" +  CLOCK_LABELS_STEP*i + "," + xyCenter + "," + xyCenter + ")";
+                hourLabelGroup.setAttribute("transform", rotateValue);
+
+                labelsNormalGroup.appendChild(hourLabelGroup);
+            }
+
+            // группа элементов "стрелки часов"
+            // общие параметры
+            params = { id: "hands" };
+            if (ROUND_LINECAP)
+                params["stroke-linecap"] = "round";
+            var handsGroup = createSvgElem(svgNS, "g", params);
+
+            // часовая стрелка
+            var params = {
+                x1: xyCenter, y1: xyCenter + TALE_LENGTH, x2: xyCenter, y2: hourHandTop, id: "hourHand",
+                "stroke-width": HOUR_HAND_WIDTH, "stroke": HOUR_HAND_COLOR
+            };
+            var hourHand = createSvgElem(svgNS, "line", params);
+
+            // минутная стрелка
+            var params = {
+                x1: xyCenter, y1: xyCenter + TALE_LENGTH, x2: xyCenter, y2: minuteHandTop, id: "minuteHand",
+                "stroke-width": MINUTE_HAND_WIDTH, "stroke": MINUTE_HAND_COLOR
+            };
+            var minuteHand = createSvgElem(svgNS, "line", params);
+
+            // секундная стрелка
+            var params = {
+                x1: xyCenter, y1: xyCenter + TALE_LENGTH, x2: xyCenter, y2: secondHandTop, id: "secondHand",
+                "stroke-width": SECOND_HAND_WIDTH, "stroke": SECOND_HAND_COLOR
+            };
+            var secondHand = createSvgElem(svgNS, "line", params);
+            
+            normalClockGroup.appendChild(clockFace);
+            normalClockGroup.appendChild(lcd);
+            normalClockGroup.appendChild(lcdText);
+            normalClockGroup.appendChild(labelsNormalGroup);
+            handsGroup.appendChild(hourHand);
+            handsGroup.appendChild(minuteHand);
+            handsGroup.appendChild(secondHand);
+            normalClockGroup.appendChild(handsGroup);
+
+            clockGroup.appendChild(normalClockGroup);
+
+            // установим тэгу svg атрибут размера для считывания контроллером
+            svgEl.setAttribute("data-width", MY_SVG_VIEWBOX_WIDTH);
+
+            // По размерам "линейных" стрелок будут созданы спрайтовые.
+            // В функцию передаю ссылку на контейнер, в который спрайты надо будет добавить.
+            // На момент добавления спрайтов этот контейнер еще не будет присоединен к DOM.
+            createVintageElements(clockGroup);
+            // вызов функции, инициализирующей создание MVC-объектов 
+            init(clockGroup);
+
+        }
+
+    </script>
+    <script>
+        "use strict";
+        /*
+        *   MODEL
+        */
+        function ClockModel() {
+            var myView = null;
+
+            var secPerMinute = 60,
+                secPerHour = 60 * 60,
+                secPer12Hours = 60 * 60 * 12;
+
+            function makeTimeStr(dateObj, currTimeFormat) {
+                if (currTimeFormat === "24")
+                    return dateObj.toLocaleTimeString();
+                else {
+                    var hours = dateObj.getHours();
+                    var min = dateObj.getMinutes();
+                    var sec = dateObj.getSeconds();
+                    var hourStr = (hours < 12) ?
+                        "AM " + (hours % 12)
+                        :
+                        "PM " + (hours % 12);
+                    // значения минут и секунд, меньшие 10, надо дополнить нулем в начале    
+                    var timeArray = Array.prototype.map.call([min, sec], function (item) {
+                        if (item < 10)
+                            return "0".concat(item.toString());
+                        else
+                            return item.toString();
+                    });
+                    timeArray.unshift(hourStr);
+                    return timeArray.join(":");
+                }
+            }
+
+            this.xyCenter = null;
+            this.timeFormat = null;
+            this.secAngle = null;
+            this.minuteAngle = null;
+            this.hourAngle = null;
+            this.timeString = "";
+            this.vintageButtonText = "Добавить винтаж";
+            this.isVintage = false;
+
+            this.start = function (view) {
+                myView = view;
+            }
+
+            this.updateView = function () {
+                if (myView)
+                    myView.update();
+            };
+
+            this.setCenter = function (width) {
+                this.xyCenter = width / 2;
+                //    this.updateView(); еще нет углов для стрелок, не обновляю
+            }
+
+            this.updateTime = function (currTime) {
+                this.timeString = makeTimeStr(currTime, this.timeFormat);
+                var timeInSeconds = currTime.getMilliseconds() / 1000 +
+                    currTime.getSeconds() +
+                    currTime.getMinutes() * 60 +
+                    currTime.getHours() * 60 * 60;
+
+                this.secAngle = (360 * (timeInSeconds % secPerMinute) / secPerMinute).round2();
+                this.minuteAngle = (360 * (timeInSeconds % secPerHour) / secPerHour).round2();
+                this.hourAngle = (360 * (timeInSeconds % secPer12Hours) / secPer12Hours).round2();
+                this.updateView();
+            }
+
+            this.setFormat = function (currFormat) {
+                this.timeFormat = currFormat;
+                // при первичной установке формата времени view не обновляю
+            }
+
+            this.formatChanged = function (currFormat) {
+                this.timeFormat = currFormat;
+                this.timeString = makeTimeStr(new Date(), this.timeFormat);
+                this.updateView();
+            }
+
+            this.skinChanged = function() {
+                this.isVintage = !this.isVintage;
+                this.vintageButtonText = (this.isVintage) ? "Убрать винтаж" : "Добавить винтаж";
+                this.updateView();
+            }
+
+        }
+
+        /*
+        *   VIEW
+        */
+        function ClockView() {
+            // это представление будет переиспользовано моделью таймера
+            var myModel = null,
+                myField = null,
+                formatRadios = null,
+                handsNormalGroup = null,
+                handsVintageGroup = null,
+                hourHand = null,
+                minuteHand = null,
+                secondHand = null,
+                hourVintHand = null,
+                minuteVintHand = null,
+                secondVintHand = null,
+                vintageBtn = null,
+                skinChanged = null,
+                lcd = null;
+
+
+            this.start = function (model, field, clockElements) {
+                myModel = model;
+                myField = field;
+
+                // через документ
+                formatRadios = document.getElementsByName("time-format");
+
+                // показываем стрелки
+                myField.appendChild(clockElements);
+
+                // группа стрелок в виде линий
+                handsNormalGroup = clockElements.querySelector("#normalElements");
+                handsVintageGroup = clockElements.querySelector("#vintageElements");
+
+                // находим стрелки
+                hourHand = clockElements.querySelector("#hourHand");
+                minuteHand = clockElements.querySelector("#minuteHand");
+                secondHand = clockElements.querySelector("#secondHand");
+                
+                // и винтажные
+                // при создании <use> для спрайтов добавил data-атрибут 
+
+                hourVintHand = clockElements.querySelector("use[data-hand='hour']");
+                minuteVintHand = clockElements.querySelector("use[data-hand='minute']");
+                secondVintHand = clockElements.querySelector("use[data-hand='second']");
+    
+                // находим экран
+                lcd = clockElements.querySelector("#lcd");
+
+                // кнопка включения винтажа
+                vintageBtn = document.getElementById("vintage");
+
+                // признак смены шкурки
+                skinChanged = myModel.isVintage;
+
+            }
+
+
+            this.update = function () {
+                lcd.innerHTML = myModel.timeString;
+
+                var hourAngle,
+                    minuteAngle,
+                    secondAngle;
+
+                var transformForHour = [myModel.hourAngle, myModel.xyCenter, myModel.xyCenter].join(",") ;
+                var transformForMinute = [myModel.minuteAngle, myModel.xyCenter, myModel.xyCenter].join(",") ;
+                var transformForSecond = [myModel.secAngle, myModel.xyCenter, myModel.xyCenter].join(",") ;
+
+                hourHand.setAttribute("transform", "rotate(" + transformForHour + ")");
+                minuteHand.setAttribute("transform", "rotate(" + transformForMinute + ")");
+                secondHand.setAttribute("transform", "rotate(" + transformForSecond + ")");
+
+                hourVintHand.setAttribute("transform", "rotate(" + transformForHour + ")");
+                minuteVintHand.setAttribute("transform", "rotate(" + transformForMinute + ")");
+                secondVintHand.setAttribute("transform", "rotate(" + transformForSecond + ")");
+
+                // это 2-way binding?
+                for (var i=0; i<formatRadios.length; i++) {
+                    // id "12h" и "24h" согласно разметке страницы
+                    if (formatRadios[i].getAttribute("id") === myModel.timeFormat+"h")
+                        formatRadios[i].checked = true;
+                }
+
+                // при необходимости показываем группу винтажных стрелок, убрав обычные
+                function swapDisplay(group1, group2) {
+                    var hide = "display: none";
+                    var show = "";
+                    if ( group1.getAttribute("style") === null ||
+                            group1.getAttribute("style") === "") { // атрибута нет или он равен ""
+                        group1.setAttribute("style", hide);
+                        group2.setAttribute("style", show);
+                    } else {
+                        group1.setAttribute("style", show);
+                        group2.setAttribute("style", hide);
+                    }
+                }
+
+                if ( skinChanged !== myModel.isVintage ) {
+                    swapDisplay(handsNormalGroup, handsVintageGroup);
+                    skinChanged = !skinChanged;
+                    vintageBtn.textContent = myModel.vintageButtonText;
+                }
+            }
+        }
+
+
+        /*
+        *   CONTROLLER
+        */
+        function ClockController() {
+            var myModel = null; // с какой моделью работаем
+            var myField = null; // внутри какого элемента DOM наша вёрстка
+            var clockTimer = null; // источник события для изменения состояния модели
+            var svgWidth = null;
+            var timeFormat = null;
+
+            this.start = function (model, field) {
+                myModel = model;
+                myField = field;
+
+                // формат времени
+                // находим радиокнопки
+                var formatRadios = document.getElementsByName("time-format");
+                for (var i = 0; i < formatRadios.length; i++) {
+                    formatRadios[i].addEventListener("change", this.changeFormat);
+                    if (formatRadios[i].checked)
+                        timeFormat = formatRadios[i].value;
+                }
+
+                // слушатель изменения "шкурки" часов
+                var vintageButton = document.getElementById("vintage");
+                vintageButton.addEventListener("click", this.changeSkin);
+
+                // получаем из DOM значения для записи в атрибуты модели
+                svgWidth = myField.getAttribute("data-width");
+                myModel.setCenter(svgWidth);
+                myModel.setFormat(timeFormat);
+                myModel.updateTime(new Date());
+            }
+
+            this.timerFires = function() {
+                var timeNow = new Date();
+                // +10 мсек на случай свербыстрой работы метода timerFires в модели
+                myModel.updateTime(timeNow);
+                clockTimer = setTimeout(this.timerFires.bind(this), 1000 - timeNow.getMilliseconds() + 10);
+            }
+
+            this.changeFormat = function(EO) {
+                EO = EO || window.event;
+                var target = (EO.srcElement) ? EO.srcElement : EO.target;
+                myModel.formatChanged(target.value);
+            }
+
+            this.changeSkin = function() {
+                var target = this;
+                myModel.skinChanged(target);
+                myModel.formatChanged("12");
+            }
+
+        }
+
+        function init(clockElements) {
+            var svgCont = document.getElementById("clock");
+            // настройка, инициализация
+            // создаём компоненты
+            var clockC = new ClockController();
+            var clockM = new ClockModel();
+            var clockV = new ClockView();
+
+            // увязываем компоненты clockHandsView с другом
+            clockM.start(clockV);
+            // clockElements - это svg группа со стрелками, которая при инициализации представления
+            // будет удочерена родительским элементом svgCont
+            clockV.start(clockM, svgCont, clockElements);
+            clockC.start(clockM, svgCont);
+
+            // Контроллер инициирует запуск часов
+            clockC.timerFires();
+
+        }
+    </script>
+    
+    <script src="sprites.js"></script>
+
+</body>
+
+</html>

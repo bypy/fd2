@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>N.24 Домашнее задание VALID_FORM</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <div class="form-wrapper">
+            <form id="catalogForm" class="dynform dynform--grey" method="POST" action="http://fe.it-academy.by/TestForm.php"
+                autocomplete="on" target="_blank" novalidate>
+            </form>
+        </div>
+    </div>
+    <script src="form_builder.js"></script>
+    <script src="form_data.js"></script>
+    <script>
+        "use strict";
+        (function(){
+            var targetFormElem = document.getElementById(formDescrFromBack.id);
+            var formParams = formDescrFromBack.params;
+            if ( targetFormElem && formParams ) {
+                data2Form(targetFormElem, formParams);
+            } else {
+                console.log("Ошибка создания формы");
+            }
+        })();
+    </script>
+    <script src="validateFormV3.js"></script>
+</html>

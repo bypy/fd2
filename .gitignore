@@ -1,0 +1,7 @@
+node_modules/
+.hg/
+inspect/
+tmp/
+_ЛЕКЦИИ/
+package-lock.json
+**/[Originals]/
