@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Tennis SVG</title>
+  <style>
+    #scoreBar {
+      -moz-user-select: none;
+			-khtml-user-select: none;
+			-webkit-user-select: none;
+			user-select: none;
+    }
+  </style>
+</head>
+<body style="background-color: darkslategray">
+  <div id="scoreBar"></div>
+  <svg xmlns="http://www.w3.org/2000/svg" id="container"></svg>
+  <div id="start">
+    <button>Старт</button>
+  </div>
+<script src="main.js"></script>
+<script>
+  window.onload = tennisSVG;
+</script>
+</body>
+</html>
